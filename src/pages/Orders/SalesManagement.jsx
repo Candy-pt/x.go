@@ -5,7 +5,7 @@ import './SalesManagement.css';
 // Import các mảnh ghép
 import CompletedOrders from './sale/ls';
 import CustomerHistoryModal from './sale/his';
-import Create from './sale/Create';
+import Create from './sale/create';
 import Custom from './sale/Custom';
 import DeliveryT from './sale/DeliveryT';
 import Oder from './sale/Oder';
