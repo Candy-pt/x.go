@@ -1,0 +1,30 @@
+{
+  "name": "Hệ Thống Quản Lý Xưởng Gỗ",
+  "short_name": "Xưởng Gỗ",
+  "description": "Hệ thống quản lý sản xuất và kinh doanh cho xưởng gỗ Make-to-Order",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Xem tổng quan xưởng",
+      "url": "/",
+      "icons": [{ "src": "/vite.svg", "sizes": "96x96" }]
+    }
+  ]
+}
+

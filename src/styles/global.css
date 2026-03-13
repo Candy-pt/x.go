@@ -1,0 +1,52 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: var(--nav-height-mobile);
+}
+
+/* Các thẻ HTML cơ bản dùng chung toàn hệ thống */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background-color: #f9fafb; font-weight: 600; color: var(--text-light); }
+tr:hover { background-color: #f9fafb; }
+
+button { font-family: inherit; transition: opacity 0.2s; cursor: pointer; }
+button:active { opacity: 0.8; transform: scale(0.98); }
+
+.spinner {
+  border: 3px solid #DCB485;
+  border-top: 3px solid #A45C23;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Container chứa các tab */
+.sub-tabs, .filter-group, .tab-header {
+  display: flex;            /* Sử dụng Flexbox để dàn hàng ngang */
+  width: 100%;              /* Kéo dài hết chiều rộng khung chứa */
+  gap: 10px;                /* Khoảng cách đồng đều giữa các nút */
+  margin-bottom: 20px;
+  overflow-x: auto;  
+  justify-content: flex-start;       /* Cho phép cuộn trên điện thoại nếu quá nhiều tab */
+}
+
+/* Các nút tab bên trong */
+.sub-tab-btn, .filter-btn, .nav-item-mobile {
+  min-width: 90px;         /* Đảm bảo nút không bị bóp quá nhỏ khi có nhiều tab */
+  text-align: center;       /* Căn giữa chữ */
+  white-space: nowrap;      /* Không cho chữ xuống dòng làm lệch chiều cao */
+  padding: 10px 12px;       /* Padding để nút trông cân đối */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+

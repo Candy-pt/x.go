@@ -1,0 +1,368 @@
+/* Main Layout - Responsive Design */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar - Desktop */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--coffee-dark);
+  color: var(--coffee-white);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(76, 33, 19, 0.2);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(220, 180, 133, 0.3);
+}
+
+.sidebar-header h2 {
+  font-size: 1.3rem;
+  color: var(--coffee-cream);
+  font-weight: 800;
+  margin: 0;
+  flex: 1;
+}
+
+.sidebar-close {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--coffee-cream);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--coffee-cream);
+  padding: 12px 15px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  background: rgba(220, 180, 133, 0.15);
+  color: var(--coffee-white);
+}
+
+.nav-btn.active {
+  background: var(--coffee-medium);
+  color: var(--coffee-white);
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(164, 92, 35, 0.3);
+}
+
+.nav-divider {
+  border: none;
+  border-top: 1px solid rgba(220, 180, 133, 0.3);
+  margin: 15px 0;
+}
+
+.nav-btn.logout-btn {
+  color: #fca5a5;
+  margin-top: auto;
+}
+
+.nav-btn.logout-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-body);
+  overflow-y: auto;
+  padding-bottom: var(--nav-height-mobile);
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 30px;
+  background: var(--bg-body); /* use app background to remove white bar */
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  box-shadow: none;
+}
+
+.main-header h1 {
+  font-size: 1.6rem;
+  color: var(--coffee-dark);
+  margin: 0;
+  flex: 1;
+  font-weight: 700;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--coffee-dark);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.logout-btn-header {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.content-body {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  /* Constrain content for desktop and center it */
+  max-width: 2000px;
+  margin: 0 auto;
+}
+
+/* Header uses default padding inside the main content area */
+/* No extra left padding needed because .main-content already accounts for the sidebar */
+
+/* Sidebar Overlay for Mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Bottom Navigation - Mobile Only */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height-mobile);
+  background: white;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  z-index: 100;
+  box-shadow: 0 -2px 8px rgba(76, 33, 19, 0.1);
+}
+
+.nav-item-mobile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px 5px;
+}
+
+.nav-item-mobile:hover {
+  color: var(--primary);
+}
+
+.nav-item-mobile.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.nav-item-mobile span:first-child {
+  font-size: 20px;
+}
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .main-content {
+    margin-left: var(--sidebar-width);
+  }
+
+  .main-header {
+    padding: 15px 20px;
+  }
+
+  .main-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .content-body {
+    padding: 20px;
+  }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-close {
+    display: block;
+  }
+
+  .sidebar-overlay {
+    display: block !important;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-bottom: calc(var(--nav-height-mobile) + 20px);
+  }
+
+  .main-header {
+    padding: 12px 15px;
+    gap: 10px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .logout-btn-header {
+    display: block;
+  }
+
+  .main-header h1 {
+    font-size: 1.2rem;
+    flex: 1;
+  }
+
+  .content-body {
+    padding: 15px;
+  }
+
+  .bottom-nav {
+    display: flex;
+  }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .nav-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .main-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .menu-toggle {
+    font-size: 24px;
+    padding: 3px;
+  }
+
+  .main-header h1 {
+    font-size: 1rem;
+  }
+
+  .logout-btn-header {
+    font-size: 20px;
+  }
+
+  .content-body {
+    padding: 12px;
+  }
+
+  .nav-item-mobile {
+    gap: 2px;
+    padding: 5px 3px;
+    font-size: 11px;
+  }
+
+  .nav-item-mobile span:first-child {
+    font-size: 18px;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

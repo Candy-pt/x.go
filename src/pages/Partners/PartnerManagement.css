@@ -1,0 +1,92 @@
+/* PartnerManagement.css */
+
+.partner-container {
+    padding: 20px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Header & Filter */
+.partner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 15px;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Modal Tabs */
+.modal-tabs {
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 -30px 20px -30px;
+    padding: 0 30px;
+}
+
+.modal-tab-btn {
+    padding: 12px 20px;
+    background: #f9f9e2d4;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    color: var(--text-main);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.modal-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* History Styles */
+.partner-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.history-item {
+    padding: 15px;
+    background: var(--bg-body);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.history-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.stat-box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.stat-box .label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 5px; }
+.stat-box .value { font-size: 1.4rem; font-weight: 800; color: var(--primary); }

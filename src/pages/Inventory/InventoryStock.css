@@ -1,0 +1,123 @@
+/* InventoryStock.css */
+
+.inventory-stock-container {
+    padding: 20px;
+    animation: fadeIn 0.4s ease-in;
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.inventory-header h3 {
+    margin: 0;
+    color: var(--coffee-dark);
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+/* Bộ lọc (Filter Buttons) */
+.filter-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--coffee-cream);
+    border-radius: 25px;
+    cursor: pointer;
+    background-color: var(--coffee-white);
+    color: var(--coffee-dark);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    background-color: rgba(164, 92, 35, 0.05);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--coffee-white);
+    box-shadow: 0 4px 10px rgba(164, 92, 35, 0.2);
+}
+
+/* Bảng dữ liệu (Table) */
+.stock-table-wrapper {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-table thead tr {
+    background: var(--primary-light);
+    color: var(--coffee-white);
+    text-align: left;
+}
+
+.stock-table th {
+    padding: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stock-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.batch-code {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Badge phân loại */
+.type-badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.type-raw { background: #fff7ed; color: #c2410c; }
+.type-finished { background: #eff6ff; color: #1d4ed8; }
+.type-byproduct { background: #f3f4f6; color: #4b5563; }
+
+/* Số lượng */
+.stock-value-cell {
+    text-align: right;
+}
+
+.stock-number {
+    color: var(--coffee-dark);
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.unit-label {
+    color: var(--text-light);
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

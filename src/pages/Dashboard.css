@@ -1,0 +1,181 @@
+/* 1. KHAI BÁO BIẾN CHUNG (Tối ưu màu sắc gỗ Vũ Hoa) */
+:root {
+  --primary: #A45C23;
+  --primary-dark: #4C2113;
+  --primary-light: #DCB485;
+  --bg-body: #f8f9fa;
+  --shadow: 0 4px 15px rgba(76, 33, 19, 0.08);
+  --radius: 12px;
+  --white: #ffffff;
+}
+
+/* 2. CẤU TRÚC BAO QUANH */
+.dashboard-wrapper {
+  padding: 20px;
+  background: var(--bg-body);
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.db-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.db-title h1 {
+  color: var(--primary-dark);
+  font-size: 24px;
+  margin: 0;
+  border-left: 5px solid var(--primary);
+  padding-left: 15px;
+  font-weight: 700;
+}
+
+.db-title p {
+  color: #888; /* Chỉnh lại màu xám để dễ đọc hơn trên nền trắng */
+  margin: 5px 0 0 0;
+  font-size: 14px;
+}
+
+/* 3. KPI GRID (4 Thẻ chỉ số trên cùng) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.kpi-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  color: white;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.kpi-card:hover { transform: translateY(-5px); }
+
+.kpi-card.gold  { background: linear-gradient(135deg, #DCB485, #B38B60); }
+.kpi-card.brown { background: linear-gradient(135deg, #A45C23, #4C2113); }
+.kpi-card.green { background: linear-gradient(135deg, #2D5A27, #1B3A18); }
+.kpi-card.dark  { background: linear-gradient(135deg, #444, #222); }
+
+.kpi-card label { font-size: 13px; opacity: 0.9; display: block; margin-bottom: 5px; }
+.kpi-card h3 { font-size: 22px; margin: 0; font-weight: 800; }
+.kpi-card .trend { font-size: 12px; opacity: 0.8; margin-top: 10px; display: block; }
+
+/* 4. MAIN BENTO GRID (Bố cục các khối nội dung) */
+.main-db-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.col-span-2 { grid-column: span 2; }
+
+.db-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid #eee;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 10px;
+}
+
+.card-header h4 { margin: 0; color: var(--primary-dark); font-size: 16px; font-weight: 700; }
+
+/* 5. CHI TIẾT BẢNG VÀ DANH SÁCH */
+.db-table { width: 100%; border-collapse: collapse; }
+.db-table th { text-align: left; padding: 10px; font-size: 12px; color: #B38B60; border-bottom: 2px solid #f9f9f9; }
+.db-table td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
+.db-table tr:hover { background: #fbf6f1; }
+
+.machine-item, .alert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+/* Các nhãn trạng thái (Pill & Tag) */
+.pill { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.pill.PENDING { background: #fff3e0; color: #ef6c00; }
+.pill.COMPLETED { background: #e8f5e9; color: #2e7d32; }
+.pill.PRODUCTION { background: #f3e5f5; color: #7b1fa2; }
+
+.status-tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+.status-tag.running { background: #e8f5e9; color: #2e7d32; }
+.status-tag.error { background: #ffebee; color: #c62828; }
+.status-tag.maint { background: #fff3e0; color: #ef6c00; }
+
+.alert-qty {
+  color: #ef4444; font-weight: 800; background: #fee2e2;
+  padding: 2px 8px; border-radius: 4px; font-size: 12px;
+}
+
+/* 6. BỘ LỌC BIỂU ĐỒ (Chart Filters) */
+.chart-filters {
+  display: flex;
+  background: #f0f0f0;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.chart-filters button {
+  padding: 5px 12px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.chart-filters button.active {
+  background: var(--white);
+  color: var(--primary-dark);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* 7. NÚT BẤM VÀ TIỆN ÍCH */
+.db-actions { display: flex; gap: 12px; }
+
+.btn-add, .btn-import {
+  padding: 10px 18px; border: none; border-radius: 8px;
+  font-weight: 600; cursor: pointer; transition: 0.3s;
+}
+.btn-add { background: var(--primary-dark); color: white; }
+.btn-import { background: var(--primary-light); color: var(--primary-dark); }
+.btn-add:hover { opacity: 0.9; transform: scale(1.02); }
+
+/* 8. HIỆU ỨNG VÀ RESPONSIVE */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .main-db-grid { grid-template-columns: 1fr; }
+  .col-span-2 { grid-column: span 1; }
+}
+
+@media (max-width: 600px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .db-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+}

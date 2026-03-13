@@ -1,0 +1,55 @@
+/* ProductManagement.css */
+
+.product-mgmt-container {
+    padding: 20px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Tùy chỉnh Modal cho Form Sản phẩm */
+.product-modal-content {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 15px;
+    width: 600px; /* Rộng hơn một chút để chia cột */
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Chia cột cho các trường nhập liệu ngắn */
+.product-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Badge hiển thị loại sản phẩm trong bảng */
+.type-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.tag-raw { background-color: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+.tag-finished { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+.tag-byproduct { background-color: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb; }
+
+/* SKU font đặc biệt */
+.sku-text {
+    font-family: 'Monaco', 'Consolas', monospace;
+    color: var(--coffee-dark);
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 600px) {
+    .product-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
