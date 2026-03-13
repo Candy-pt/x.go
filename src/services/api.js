@@ -18,7 +18,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: 'https://x-go.onrender.com/api',
     withCredentials: true, // BẮT BUỘC: Để trình duyệt gửi Cookie kèm theo request
 });
 

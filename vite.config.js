@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,              // port chạy dev server
     https: false,            // để chạy HTTP bình thường, đổi thành true nếu muốn HTTPS
     proxy: {                 // proxy API sang backend
-      '/api': 'http://localhost:8000',
+      '/api': 'https://x-go.onrender.com',
     },
     hmr: {                   // cấu hình Hot Module Reload
       host: 'localhost',
