@@ -33,7 +33,7 @@ export default defineConfig({
     port: 5173,              // port chạy dev server
     https: false,            // để chạy HTTP bình thường, đổi thành true nếu muốn HTTPS
     proxy: {                 // proxy API sang backend
-      '/api': 'https://x-go.onrender.com',
+      '/api': 'https://xgob-production.up.railway.app',
     },
     hmr: {                   // cấu hình Hot Module Reload
       host: 'localhost',
