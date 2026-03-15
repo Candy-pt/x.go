@@ -18,8 +18,8 @@ button { font-family: inherit; transition: opacity 0.2s; cursor: pointer; }
 button:active { opacity: 0.8; transform: scale(0.98); }
 
 .spinner {
-  border: 3px solid #DCB485;
-  border-top: 3px solid #A45C23;
+  border: 3px solid #3c2e1f;
+  border-top: 3px solid #1c1006;
   border-radius: 50%;
   width: 24px;
   height: 24px;

@@ -30,15 +30,15 @@ export default defineConfig({
     })
   ],
   server: {
-    port: 5173,              // port chạy dev server
-    https: false,            // để chạy HTTP bình thường, đổi thành true nếu muốn HTTPS
-    proxy: {                 // proxy API sang backend
+    port: 5173,             
+    https: false,            
+    proxy: {                
       '/api': 'https://xgob-production.up.railway.app',
     },
-    hmr: {                   // cấu hình Hot Module Reload
+    hmr: {                   
       host: 'localhost',
       port: 5173,
-      protocol: 'ws',        // dùng ws cho HTTP, wss cho HTTPS
+      protocol: 'ws',       
     },
   },
 });

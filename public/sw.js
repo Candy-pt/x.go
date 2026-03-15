@@ -1,5 +1,5 @@
 // Service Worker cho PWA
-const CACHE_NAME = 'xuong-go-v2'; // Updated version to clear old cache
+const CACHE_NAME = 'xuong-go-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,7 +10,7 @@ const urlsToCache = [
   '/vite.svg'
 ];
 
-// Install event - Cache resources
+// Install event 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
         console.error('Service Worker: Cache failed', err);
       })
   );
-  self.skipWaiting(); // Activate immediately
+  self.skipWaiting();
 });
 
 // Activate event - Clean up old caches
@@ -39,7 +39,7 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  return self.clients.claim(); // Take control of all pages
+  return self.clients.claim(); 
 });
 
 // Fetch event - Serve from cache, fallback to network
@@ -49,7 +49,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip API requests (always use network)
+  // Skip API requests 
   if (event.request.url.includes('/api/')) {
     return;
   }
@@ -57,14 +57,11 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Return cached version or fetch from network
         return response || fetch(event.request).then((response) => {
-          // Don't cache if not a valid response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
 
-          // Clone the response
           const responseToCache = response.clone();
 
           caches.open(CACHE_NAME)
@@ -76,7 +73,6 @@ self.addEventListener('fetch', (event) => {
         });
       })
       .catch(() => {
-        // Fallback for offline
         if (event.request.destination === 'document') {
           return caches.match('/index.html');
         }

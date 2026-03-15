@@ -1,19 +1,19 @@
 /* --- BIẾN MÀU SẮC (COFFEE THEME) --- */
 :root {
-  --coffee-dark: #4C2113;      /* Màu cà phê đậm */
-  --coffee-medium: #A45C23;    /* Màu cà phê trung bình */
-  --coffee-light: #B38B60;     /* Màu cà phê nhạt */
+  --coffee-dark: #e0663ec9;      /* Màu cà phê đậm */
+  --coffee-medium: #ce752dd8;    /* Màu cà phê trung bình */
+  --coffee-light: #b38b60e0;     /* Màu cà phê nhạt */
   --coffee-cream: #DCB485;      /* Màu kem cà phê */
   --coffee-white: #FFFFFF;      /* Trắng */
   
   --primary: #A45C23;           /* Màu chủ đạo */
-  --primary-dark: #4C2113;
+  --primary-dark: #a246288b;
   --primary-light: #B38B60;
   --bg-body: #DCB485;           /* Nền kem cà phê */
   --bg-card: #FFFFFF;
-  --text-main: #4C2113;
-  --text-light: #B38B60;
-  --border: #DCB485;
+  --text-main: #080606;
+  --text-light: #161411;
+  --border: #3e3223;
   --shadow: 0 4px 6px -1px rgba(76, 33, 19, 0.1), 0 2px 4px -1px rgba(76, 33, 19, 0.06);
   --radius: 12px;
   --nav-height-mobile: 60px;
@@ -77,7 +77,7 @@
 }
 
 .sub-tab-btn:hover {
-  background-color: rgba(220,180,133,0.22);
+  background-color: rgba(241, 213, 182, 0.642);
   color: var(--coffee-dark);
 }
 
@@ -96,7 +96,7 @@
   right: 10px;
   bottom: -10px;
   height: 4px;
-  background: linear-gradient(90deg, rgba(76,33,19,0.95), rgba(164,92,35,0.95));
+  background: linear-gradient(90deg, rgba(239, 196, 182, 0.95), rgba(232, 190, 155, 0.95));
   border-radius: 4px;
 }
 
@@ -113,7 +113,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #374151;
+  color: #000000;
   font-size: 0.95rem;
 }
 
@@ -124,12 +124,12 @@ select,
 textarea {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #0f1116;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background-color: #fff;
-  color: #4C2113;
+  color: #000000;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -195,8 +195,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .spinner {
-  border: 3px solid #DCB485;
-  border-top: 3px solid #A45C23;
+  border: 3px solid #ffdab1;
+  border-top: 3px solid #492e18;
   border-radius: 50%;
   width: 24px;
   height: 24px;

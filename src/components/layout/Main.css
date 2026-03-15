@@ -1,4 +1,4 @@
-/* Main Layout - Responsive Design */
+/* Main Layout  */
 
 .app-container {
   display: flex;
@@ -117,7 +117,7 @@
   align-items: center;
   gap: 15px;
   padding: 20px 30px;
-  background: var(--bg-body); /* use app background to remove white bar */
+  background: var(--bg-body); 
   border-bottom: 1px solid rgba(0,0,0,0.06);
   box-shadow: none;
 }
@@ -152,13 +152,10 @@
   flex: 1;
   padding: 30px;
   overflow-y: auto;
-  /* Constrain content for desktop and center it */
   max-width: 2000px;
   margin: 0 auto;
 }
 
-/* Header uses default padding inside the main content area */
-/* No extra left padding needed because .main-content already accounts for the sidebar */
 
 /* Sidebar Overlay for Mobile */
 .sidebar-overlay {
@@ -172,7 +169,7 @@
   z-index: 999;
 }
 
-/* Bottom Navigation - Mobile Only */
+/* Bottom Navigation */
 .bottom-nav {
   display: none;
   position: fixed;

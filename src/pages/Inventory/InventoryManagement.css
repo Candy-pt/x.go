@@ -10,7 +10,7 @@
   gap: 12px;
   margin-bottom: 25px;
   flex-wrap: wrap;
-  border-bottom: 2px solid #DCB485;
+  border-bottom: 2px solid #f0e1cf;
   padding-bottom: 12px;
 }
 
@@ -18,7 +18,7 @@
   padding: 10px 20px;
   background: #f9f9e2d4;
   border: none;
-  color: #B38B60;
+  color: #010101;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -29,11 +29,11 @@
 }
 
 .inv-tab-btn:hover {
-  color: #A45C23;
+  color: #090909;
 }
 
 .inv-tab-btn.active {
-  color: #4C2113;
+  color: #000000;
   border-bottom-color: #A45C23;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .inv-tab-content h3 {
-  color: #4C2113;
+  color: #040404;
   font-size: 18px;
   margin-bottom: 20px;
   font-weight: 700;
@@ -84,7 +84,7 @@
 }
 
 .inv-table td.low-stock {
-  color: #ef4444;
+  color: #111111;
   font-weight: 700;
 }
 
@@ -111,7 +111,7 @@
 .form-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #4C2113;
+  color: #0f0e0e;
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -127,7 +127,7 @@
   font-family: inherit;
   transition: all 0.3s ease;
   background: white;
-  color: #4C2113;
+  color: #0e0e0e;
 }
 
 .form-group input:focus,
@@ -213,7 +213,7 @@
 .alert-code {
   font-size: 14px;
   font-weight: 700;
-  color: #4C2113;
+  color: #0c0c0c;
 }
 
 .alert-badge {
@@ -228,11 +228,11 @@
 .alert-card p {
   margin: 8px 0;
   font-size: 13px;
-  color: #4C2113;
+  color: #131212;
 }
 
 .alert-card strong {
-  color: #A45C23;
+  color: #090909;
 }
 
 .btn-import-now {
@@ -422,7 +422,7 @@
 
 .inventory-batch-modal .batch-meta {
   font-size: 14px;
-  color: #4C2113;
+  color: #090909;
 }
 
 .inventory-batch-modal h4 {
@@ -447,7 +447,7 @@
   width: 8px;
 }
 .transactions-scroll::-webkit-scrollbar-thumb {
-  background: rgba(76,33,19,0.15);
+  background: rgba(247, 106, 58, 0.541);
   border-radius: 6px;
 }
 
