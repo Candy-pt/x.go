@@ -188,4 +188,82 @@
   .nav-item-mobile span:first-child {
     font-size: 22px; /* Ưu tiên Icon to hơn để dễ nhận diện */
   }
+  .stats-grid {
+      grid-template-columns: repeat(2, 1fr); /* Chia 2 cột thay vì 4 */
+      gap: 12px; /* Thu hẹp khoảng cách */
+      margin-bottom: 20px;
+  }
+
+  .stat-card {
+      padding: 15px 10px;
+      flex-direction: column; /* Icon ở trên, chữ ở dưới */
+      align-items: flex-start;
+      text-align: left;
+  }
+
+  .stat-icon {
+      font-size: 24px;
+      margin-right: 0;
+      margin-bottom: 8px;
+      opacity: 0.5; /* Cho icon đậm hơn một chút trên mobile để dễ nhìn */
+  }
+
+  .stat-info p {
+      font-size: 16px; /* Giảm size chữ số một chút */
+  }
+
+  .filter-bar {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 10px; /* Tạo khoảng trống cho thanh cuộn */
+      display: flex;
+      -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iOS */
+  }
+  
+  .filter-bar::-webkit-scrollbar {
+      display: none; /* Ẩn thanh cuộn để nhìn sạch sẽ hơn */
+  }
+
+  .filter-bar button {
+      flex: 0 0 auto; /* Không cho nút bị co lại */
+      padding: 8px 18px;
+      font-size: 13px;
+  }
+
+  .leaderboard-item {
+      gap: 10px;
+      padding: 12px;
+  }
+
+  .rank-badge {
+      width: 30px; /* Thu nhỏ badge hạng */
+      height: 30px;
+      font-size: 16px;
+  }
+
+  .customer-name {
+      font-size: 13px;
+  }
+
+  .customer-value {
+      font-size: 12px;
+  }
+  
+  /* Làm cho thanh progress cao hơn một chút để dễ nhìn */
+  .rank-progress-bar, .progress-bg {
+      height: 6px;
+  }
+
+  .stats-dashboard-grid, .stats-charts-row {
+      grid-template-columns: 1fr !important; /* Luôn là 1 cột */
+      gap: 15px;
+  }
+
+  .chart-container {
+      padding: 15px;
+  }
+
+  .chart-container h4 {
+      font-size: 15px;
+  }
 }
