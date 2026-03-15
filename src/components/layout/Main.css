@@ -304,7 +304,7 @@
 /* Small Mobile (< 480px) */
 @media (max-width: 480px) {
   .sidebar {
-    width: 100%;
+    width: 60%;
   }
 
   .sidebar-header h2 {
@@ -339,7 +339,7 @@
   }
 
   .nav-item-mobile {
-    gap: 2px;
+    gap: 5px;
     padding: 8px 5px;
     font-size: 15px;
   }

@@ -165,3 +165,27 @@
 .rank-1 .rank-progress-fill {
   background: linear-gradient(90deg, #f1c40f, #d4af37);
 }
+
+@media (max-width: 480px) {
+  .content-body {
+    padding: 15px 10px; /* Giảm padding trái phải để nội dung rộng hơn */
+  }
+  
+  /* Đảm bảo Main Content không bị Bottom Nav che mất */
+  .main-content {
+    padding-bottom: 80px; 
+  }
+  .bottom-nav {
+    height: 65px; /* Tăng nhẹ chiều cao để không bị cấn tay */
+    padding-bottom: env(safe-area-inset-bottom); /* Hỗ trợ các máy có "tai thỏ" hoặc thanh vuốt dưới */
+  }
+
+  .nav-item-mobile {
+    font-size: 11px; /* Chữ nhỏ lại một chút */
+    gap: 2px;
+  }
+
+  .nav-item-mobile span:first-child {
+    font-size: 22px; /* Ưu tiên Icon to hơn để dễ nhận diện */
+  }
+}
