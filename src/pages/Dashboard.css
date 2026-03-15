@@ -49,8 +49,9 @@
 
 .kpi-card {
   padding: 20px;
-  border-radius: var(--primary-dark);
-  color: rgb(51, 29, 5);
+  border-radius: var(--radius);
+  color: rgb(56, 12, 12);
+  border-color: #2c210a;
   box-shadow: var(--shadow);
   transition: transform 0.3s ease;
 }
