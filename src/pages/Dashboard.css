@@ -50,7 +50,7 @@
 .kpi-card {
   padding: 20px;
   border-radius: var(--radius);
-  color: white;
+  color: rgb(18, 16, 16);
   box-shadow: var(--shadow);
   transition: transform 0.3s ease;
 }
@@ -80,7 +80,7 @@
   background: var(--white);
   border-radius: var(--radius);
   padding: 20px;
-  border: 1px solid #eee;
+  border: 1px solid #2c210a;
   box-shadow: var(--shadow);
 }
 
