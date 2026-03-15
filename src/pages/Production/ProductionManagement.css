@@ -468,3 +468,79 @@
   color: #B38B60;
   font-style: italic;
 }
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px); /* Hiệu ứng mờ nền chuẩn hiện đại */
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.detail-row {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-row span {
+  color: #666;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.no-data-sm {
+  font-size: 0.9rem;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+}
