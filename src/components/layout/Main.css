@@ -308,12 +308,12 @@
   }
 
   .sidebar-header h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   .nav-btn {
     padding: 10px 12px;
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .main-header {
@@ -322,7 +322,7 @@
   }
 
   .menu-toggle {
-    font-size: 24px;
+    font-size: 28px;
     padding: 3px;
   }
 
@@ -341,7 +341,7 @@
   .nav-item-mobile {
     gap: 2px;
     padding: 5px 3px;
-    font-size: 11px;
+    font-size: 15px;
   }
 
   .nav-item-mobile span:first-child {
