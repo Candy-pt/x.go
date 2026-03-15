@@ -22,17 +22,18 @@ const TabRecord = ({ form, orders, batches, products, onUpdateOutput, onAddOutpu
               </select>
             </div>
             <div className="form-group">
-                <label>Máy sản xuất</label>
+                <label><i className="fas fa-tools"></i> Máy thực hiện xẻ:</label>
                 <select 
-                    value={newRun.machine_id}
-                    onChange={(e) => setNewRun({...newRun, machine_id: e.target.value})}
+                    className="form-control"
+                    value={runData.machine}
+                    onChange={(e) => setRunData({...runData, machine: e.target.value})}
                     required
                 >
-                    <option value="">-- Chọn máy thực hiện --</option>
-                    {machines.map(m => (
-                    <option key={m.id} value={m.id}>{m.name}</option>
-                    ))}
+                    <option value="">-- Chọn máy --</option>
+                    <option value="1">Máy xẻ  01</option>
+                    <option value="2">Máy xẻ  02</option>
                 </select>
+                <p className="help-text">Dữ liệu này dùng để thống kê năng suất máy theo ngày/tuần.</p>
             </div>
             <div className="form-group">
               <label>Lô Gỗ Nguyên Liệu *</label>

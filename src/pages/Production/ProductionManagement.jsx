@@ -1,5 +1,3 @@
-
-  // Form states
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import './ProductionManagement.css';
@@ -9,6 +7,7 @@ import TabOrders from './TabOrders';
 import TabCreate from './TabCreate';
 import TabRecord from './TabRecord';
 import TabWastage from './TabWastage';
+import Tabthongke from './Tabthongke'; 
 
 const ProductionManagement = () => {
   const [activeTab, setActiveTab] = useState('ORDERS');
@@ -17,6 +16,11 @@ const ProductionManagement = () => {
   const [batches, setBatches] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  const [machines, setMachines] = useState([
+    { id: 1, name: "Máy Xẻ Nằm 01", status: "active", today_outputs: [] },
+    { id: 2, name: "Máy Xẻ Đứng 02", status: "inactive", today_outputs: [] }
+  ]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -28,6 +32,7 @@ const ProductionManagement = () => {
   const [createForm, setCreateForm] = useState({ sale_order_id: '', start_date: '', note: '' });
   const [recordForm, setRecordForm] = useState({ 
     production_order_id: '', raw_batch_id: '', raw_qty_used: '', 
+    machine_id: '', // Thêm máy vào form mẻ xẻ
     outputs: [{ product_id: '', quantity: '' }], note: ''
   });
 
@@ -36,7 +41,7 @@ const ProductionManagement = () => {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'WASTAGE') fetchWastageData();
+    if (activeTab === 'WASTAGE' || activeTab === 'INSIGHTS') fetchWastageData();
   }, [activeTab]);
 
   const fetchAllData = async () => {
@@ -107,11 +112,12 @@ const ProductionManagement = () => {
         production_order: Number(recordForm.production_order_id),
         raw_batch: Number(recordForm.raw_batch_id),
         raw_qty_used: parseFloat(recordForm.raw_qty_used),
+        machine: recordForm.machine_id, // Gửi ID máy xuống Backend
         outputs: formattedOutputs,
         note: recordForm.note,
       });
       alert("Ghi nhận thành công!");
-      setRecordForm({ production_order_id: '', raw_batch_id: '', raw_qty_used: '', outputs: [{ product_id: '', quantity: '' }], note: '' });
+      setRecordForm({ production_order_id: '', raw_batch_id: '', raw_qty_used: '', machine_id: '', outputs: [{ product_id: '', quantity: '' }], note: '' });
       fetchAllData();
     } catch (err) { alert("Lỗi ghi nhận mẻ"); }
   };
@@ -121,19 +127,16 @@ const ProductionManagement = () => {
     return rawQty <= 0 ? 0 : (((rawQty - totalOutput) / rawQty) * 100).toFixed(2);
   };
 
-  // 2. Hàm mở Modal Sửa
   const handleEditClick = (order) => {
-    setSelectedOrder({ ...order }); // Clone dữ liệu để tránh tham chiếu trực tiếp
+    setSelectedOrder({ ...order }); 
     setIsEditModalOpen(true);
   };
 
-  // 3. Hàm mở Modal Chi tiết
   const handleViewDetail = (order) => {
     setSelectedOrder(order);
     setIsDetailModalOpen(true);
   };
 
-  // 4. Hàm Lưu sau khi sửa (API Update)
   const handleUpdateOrder = async (e) => {
     e.preventDefault();
     try {
@@ -141,11 +144,11 @@ const ProductionManagement = () => {
         sale_order: selectedOrder.sale_order?.id,
         start_date: selectedOrder.start_date,
         note: selectedOrder.note,
-        status: selectedOrder.status, // Cho phép sửa cả trạng thái ở đây
+        status: selectedOrder.status, 
       });
       alert('Cập nhật lệnh thành công!');
       setIsEditModalOpen(false);
-      fetchAllData(); // Refresh danh sách
+      fetchAllData(); 
     } catch (err) {
       alert('Lỗi cập nhật: ' + JSON.stringify(err.response?.data));
     }
@@ -154,55 +157,65 @@ const ProductionManagement = () => {
   return (
     <div className="production-container">
       <div className="production-tabs">
-        {['ORDERS', 'CREATE', 'RECORD', 'WASTAGE'].map(tab => (
+        {[
+          { id: 'ORDERS', icon: 'clipboard-list', label: 'Lệnh SX' },
+          { id: 'CREATE', icon: 'plus', label: 'Tạo Lệnh' },
+          { id: 'RECORD', icon: 'hammer', label: 'Ghi Nhận Mẻ' },
+          { id: 'WASTAGE', icon: 'chart-bar', label: 'Hao Hụt' },
+          { id: 'INSIGHTS', icon: 'chart-pie', label: 'Thống Kê' } // Tab mới
+        ].map(tab => (
           <button 
-            key={tab}
-            className={`prod-tab-btn ${activeTab === tab ? 'active' : ''}`} 
-            onClick={() => setActiveTab(tab)}
+            key={tab.id}
+            className={`prod-tab-btn ${activeTab === tab.id ? 'active' : ''}`} 
+            onClick={() => setActiveTab(tab.id)}
           >
-            <i className={`fas fa-${tab === 'ORDERS' ? 'clipboard-list' : tab === 'CREATE' ? 'plus' : tab === 'RECORD' ? 'hammer' : 'chart-bar'}`} style={{ marginRight: 8 }}></i>
-            {tab === 'ORDERS' ? 'Lệnh SX' : tab === 'CREATE' ? 'Tạo Lệnh' : tab === 'RECORD' ? 'Ghi Nhận Mẻ' : 'Tra Hao Hụt'}
+            <i className={`fas fa-${tab.icon}`} style={{ marginRight: 8 }}></i>
+            {tab.label}
           </button>
         ))}
       </div>
 
-      {activeTab === 'ORDERS' && (
-        <TabOrders 
-          loading={loading} 
-          orders={orders} 
-          onDelete={handleDeleteOrder}
-          onEdit={handleEditClick}      // Truyền hàm xuống
-          onViewDetail={handleViewDetail} // Truyền hàm xuống
-        /> )}
-      {activeTab === 'CREATE' && <TabCreate form={createForm} setForm={setCreateForm} saleOrders={saleOrders} onSubmit={handleCreateOrder} />}
-      {activeTab === 'RECORD' && (
-        <TabRecord 
-          form={recordForm} setForm={setRecordForm} orders={orders} batches={batches} products={products}
-          onAddOutput={() => setRecordForm({...recordForm, outputs: [...recordForm.outputs, { product_id: '', quantity: '' }]})}
-          onRemoveOutput={(idx) => setRecordForm({...recordForm, outputs: recordForm.outputs.filter((_, i) => i !== idx)})}
-          onUpdateOutput={(idx, field, val) => {
-            const newOuts = [...recordForm.outputs]; newOuts[idx][field] = val;
-            setRecordForm({...recordForm, outputs: newOuts});
-          }}
-          calculateWastage={calculateWastage} onSubmit={handleRecordRun}
-        />
-      )}
-      {activeTab === 'WASTAGE' && <TabWastage loading={wastageLoading} orders={wastageOrders} averageWastage={averageWastage} />}
-     
+      <div className="tab-render-area">
+        {activeTab === 'ORDERS' && (
+          <TabOrders 
+            loading={loading} orders={orders} 
+            onDelete={handleDeleteOrder} onEdit={handleEditClick} onViewDetail={handleViewDetail} 
+          />
+        )}
+        
+        {activeTab === 'CREATE' && <TabCreate form={createForm} setForm={setCreateForm} saleOrders={saleOrders} onSubmit={handleCreateOrder} />}
+        
+        {activeTab === 'RECORD' && (
+          <TabRecord 
+            form={recordForm} setForm={setRecordForm} orders={orders} batches={batches} products={products}
+            machines={machines} // Truyền máy vào để chọn trong form
+            onAddOutput={() => setRecordForm({...recordForm, outputs: [...recordForm.outputs, { product_id: '', quantity: '' }]})}
+            onRemoveOutput={(idx) => setRecordForm({...recordForm, outputs: recordForm.outputs.filter((_, i) => i !== idx)})}
+            onUpdateOutput={(idx, field, val) => {
+              const newOuts = [...recordForm.outputs]; newOuts[idx][field] = val;
+              setRecordForm({...recordForm, outputs: newOuts});
+            }}
+            calculateWastage={calculateWastage} onSubmit={handleRecordRun}
+          />
+        )}
+        
+        {activeTab === 'WASTAGE' && <TabWastage loading={wastageLoading} orders={wastageOrders} averageWastage={averageWastage} />}
+        
+        {activeTab === 'INSIGHTS' && <Tabthongke orders={orders} machines={machines} />}
+      </div>
+
+      {/* --- MODAL SỬA --- */}
       {isEditModalOpen && selectedOrder && (
         <div className="modal-overlay">
           <div className="modal-content fade-in">
             <div className="modal-header">
-              <h3>Sửa Lệnh Sản Xuất: {selectedOrder.code}</h3>
+              <h3>Sửa Lệnh: {selectedOrder.code}</h3>
               <button className="close-btn" onClick={() => setIsEditModalOpen(false)}>&times;</button>
             </div>
             <form onSubmit={handleUpdateOrder} className="prod-form">
               <div className="form-group">
                 <label>Trạng Thái</label>
-                <select 
-                  value={selectedOrder.status}
-                  onChange={(e) => setSelectedOrder({...selectedOrder, status: e.target.value})}
-                >
+                <select value={selectedOrder.status} onChange={(e) => setSelectedOrder({...selectedOrder, status: e.target.value})}>
                   <option value="PLANNED">Lên kế hoạch</option>
                   <option value="IN_PROGRESS">Đang chạy</option>
                   <option value="COMPLETED">Hoàn thành</option>
@@ -211,23 +224,15 @@ const ProductionManagement = () => {
               </div>
               <div className="form-group">
                 <label>Ngày Bắt Đầu</label>
-                <input 
-                  type="date" 
-                  value={selectedOrder.start_date}
-                  onChange={(e) => setSelectedOrder({...selectedOrder, start_date: e.target.value})}
-                />
+                <input type="date" value={selectedOrder.start_date} onChange={(e) => setSelectedOrder({...selectedOrder, start_date: e.target.value})} />
               </div>
               <div className="form-group">
                 <label>Ghi Chú</label>
-                <textarea 
-                  rows="3"
-                  value={selectedOrder.note || ''}
-                  onChange={(e) => setSelectedOrder({...selectedOrder, note: e.target.value})}
-                />
+                <textarea rows="3" value={selectedOrder.note || ''} onChange={(e) => setSelectedOrder({...selectedOrder, note: e.target.value})} />
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={() => setIsEditModalOpen(false)}>Hủy</button>
-                <button type="submit" className="btn-primary">Lưu thay đổi</button>
+                <button type="submit" className="btn-primary">Lưu</button>
               </div>
             </form>
           </div>
@@ -243,14 +248,11 @@ const ProductionManagement = () => {
               <button className="close-btn" onClick={() => setIsDetailModalOpen(false)}>&times;</button>
             </div>
             <div className="detail-body">
-              <div className="detail-row"><span>Đơn hàng:</span> <strong>{selectedOrder.sale_order?.code}</strong></div>
-              <div className="detail-row"><span>Khách hàng:</span> {selectedOrder.sale_order?.customer?.name || 'N/A'}</div>
-              <div className="detail-row"><span>Ngày tạo:</span> {new Date(selectedOrder.created_at).toLocaleString('vi-VN')}</div>
+              <div className="detail-row"><span>Đơn hàng:</span> <strong>{selectedOrder.sale_order?.code || 'N/A'}</strong></div>
               <div className="detail-row"><span>Trạng thái:</span> <span className={`status-badge status-${selectedOrder.status?.toLowerCase()}`}>{selectedOrder.status}</span></div>
               <hr />
-              <h4>Lịch sử mẻ xẻ (Runs)</h4>
-              {/* Đây là nơi bạn có thể map danh sách runs nếu API trả về trong object order */}
-              <p className="no-data-sm">Chức năng xem mẻ xẻ chi tiết đang được cập nhật...</p>
+              <h4>Sản lượng đầu ra (Tổng các mẻ)</h4>
+              <p>Mục này thống kê từ <code>total_output</code> của Backend: <strong>{selectedOrder.total_output || 0} SP</strong></p>
             </div>
             <div className="modal-actions">
               <button className="btn-primary" onClick={() => setIsDetailModalOpen(false)}>Đóng</button>

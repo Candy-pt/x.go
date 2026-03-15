@@ -1,0 +1,64 @@
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.time-filter-btns {
+  background: #f0f2f5;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.time-filter-btns button {
+  border: none;
+  background: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.time-filter-btns button.active {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #4e73df;
+  font-weight: bold;
+}
+
+.summary-item-premium {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  color: white;
+}
+
+.machine-status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8f9fc;
+  margin-bottom: 10px;
+  border-left: 4px solid #ccc;
+}
+
+.machine-status-card.active { border-left-color: #1cc88a; }
+.machine-status-card.active .m-indicator {
+  width: 10px; height: 10px; background: #1cc88a; border-radius: 50%;
+  box-shadow: 0 0 8px #1cc88a;
+}
+
+.progress-bar-mini {
+  height: 6px; background: #eaecf4; border-radius: 3px; margin-top: 8px;
+}
+.progress-fill { height: 100%; background: #1cc88a; border-radius: 3px; }

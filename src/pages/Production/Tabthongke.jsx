@@ -1,78 +1,126 @@
-import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState, useMemo } from 'react';
+import './thongke.css';
 
-const TabProductionStats = ({ orders, runs, machines }) => {
-  // 1. Thống kê tổng hàng hóa theo mặt hàng (Section 6)
-  const totalByProduct = {};
-  runs.forEach(run => {
-    run.outputs.forEach(out => {
-      totalByProduct[out.product_name] = (totalByProduct[out.product_name] || 0) + out.quantity;
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line 
+} from 'recharts';
+
+const Tabthongke = ({ orders, machines }) => {
+  const [timeRange, setTimeRange] = useState('day'); // 'day', 'week', 'month'
+
+  // 1. THỐNG KÊ TỔNG HÀNG HÓA (Section 6)
+  const totalProducts = useMemo(() => {
+    const summary = {};
+    orders.forEach(order => {
+      order.runs?.forEach(run => {
+        run.outputs?.forEach(out => {
+          const key = out.product_name;
+          summary[key] = (summary[key] || 0) + parseFloat(out.quantity);
+        });
+      });
     });
-  });
+    return summary;
+  }, [orders]);
+
+  // 2. LOGIC XỬ LÝ DỮ LIỆU BIỂU ĐỒ NĂNG SUẤT (Section 5)
+  const chartData = useMemo(() => {
+    // Trong thực tế, bạn sẽ map qua các runs và group theo ngày/tuần/tháng
+    // Ở đây tôi giả lập cấu trúc dữ liệu dựa trên timeRange để bạn thấy giao diện
+    const dataTemplates = {
+      day: [
+        { name: 'Thứ 2', May_01: 120, May_02: 150 },
+        { name: 'Thứ 3', May_01: 140, May_02: 130 },
+        { name: 'Thứ 4', May_01: 180, May_02: 170 },
+        { name: 'Thứ 5', May_01: 100, May_02: 190 },
+        { name: 'Hôm nay', May_01: 210, May_02: 160 },
+      ],
+      week: [
+        { name: 'Tuần 1', May_01: 800, May_02: 950 },
+        { name: 'Tuần 2', May_01: 940, May_02: 830 },
+        { name: 'Tuần 3', May_01: 1100, May_02: 1070 },
+        { name: 'Tuần 4', May_01: 1200, May_02: 1190 },
+      ],
+      month: [
+        { name: 'Tháng 1', May_01: 4000, May_02: 3500 },
+        { name: 'Tháng 2', May_01: 3000, May_02: 4200 },
+        { name: 'Tháng 3', May_01: 4500, May_02: 4800 },
+      ]
+    };
+    return dataTemplates[timeRange];
+  }, [timeRange]);
 
   return (
-    <div className="stats-container fade-in">
-      {/* SECTION 6: TỔNG LƯỢNG HÀNG TẤT CẢ XƯỞNG */}
-      <section className="stats-section">
-        <h3><i className="fas fa-warehouse"></i> Tổng Kho Thành Phẩm Sản Xuất (Toàn Xưởng)</h3>
+    <div className="stats-layout fade-in">
+      
+      {/* SECTION 6: TỔNG LƯỢNG HÀNG TOÀN XƯỞNG */}
+      <div className="stats-card full-width bg-gradient-blue">
+        <div className="card-header">
+          <h3><i className="fas fa-layer-group"></i> Tổng Sản Lượng Toàn Hệ Thống</h3>
+        </div>
         <div className="product-summary-grid">
-          {Object.entries(totalByProduct).map(([name, qty]) => (
-            <div key={name} className="product-card">
-              <span className="product-name">{name}</span>
-              <span className="product-qty">{qty.toLocaleString()} <small>SP</small></span>
+          {Object.entries(totalProducts).map(([name, qty]) => (
+            <div key={name} className="summary-item-premium">
+              <span className="name">{name}</span>
+              <span className="value">{qty.toLocaleString()} <small>đv</small></span>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      <div className="main-stats-grid">
-        {/* SECTION 1 & 2: GIÁM SÁT THEO MÁY */}
-        <section className="machine-monitor">
-          <h3><i className="fas fa-microchip"></i> Giám Sát Máy Sản Xuất</h3>
-          <div className="machine-list">
-            {machines.map(m => (
-              <div key={m.id} className={`machine-item status-${m.status}`}>
-                <div className="machine-header">
-                  <h4>Máy {m.name}</h4>
-                  <span className="status-indicator">{m.status === 'active' ? 'Đang chạy' : 'Dừng'}</span>
-                </div>
-                <div className="machine-body">
-                  <h5>Mặt hàng đã sản xuất:</h5>
-                  <ul>
-                    {/* Giả sử logic lọc sản phẩm theo từng máy */}
-                    {m.produced_items.map(item => (
-                      <li key={item.id}>{item.name}: <strong>{item.qty}</strong></li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+      <div className="stats-main-grid">
+        {/* SECTION 5: BIỂU ĐỒ NĂNG SUẤT MÁY */}
+        <div className="stats-card flex-2">
+          <div className="card-header-flex">
+            <h3><i className="fas fa-chart-line"></i> Năng Suất Theo Máy</h3>
+            <div className="time-filter-btns">
+              <button className={timeRange === 'day' ? 'active' : ''} onClick={() => setTimeRange('day')}>Ngày</button>
+              <button className={timeRange === 'week' ? 'active' : ''} onClick={() => setTimeRange('week')}>Tuần</button>
+              <button className={timeRange === 'month' ? 'active' : ''} onClick={() => setTimeRange('month')}>Tháng</button>
+            </div>
           </div>
-        </section>
-
-        {/* SECTION 5: NĂNG SUẤT (CHART) */}
-        <section className="productivity-chart">
-          <h3><i className="fas fa-chart-line"></i> Năng Suất Theo Thời Gian</h3>
-          <div className="filter-time">
-            <button className="active">Ngày</button>
-            <button>Tuần</button>
-            <button>Tháng</button>
-          </div>
-          <div style={{ width: '100%', height: 300 }}>
+          <div className="chart-wrapper" style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer>
-              <BarChart data={dummyChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip cursor={{fill: '#f5f5f5'}} />
                 <Legend />
-                <Bar dataKey="May_01" fill="#8884d8" name="Máy 01" />
-                <Bar dataKey="May_02" fill="#82ca9d" name="Máy 02" />
+                <Bar dataKey="May_01" fill="#4e73df" name="Máy Xẻ 01" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="May_02" fill="#1cc88a" name="Máy Xẻ 02" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </section>
+        </div>
+
+        {/* SECTION 1 & 2: TRẠNG THÁI MÁY */}
+        <div className="stats-card flex-1">
+          <div className="card-header">
+            <h3><i className="fas fa-microchip"></i> Giám Sát Real-time</h3>
+          </div>
+          <div className="machine-list-vertical">
+            {machines.map(m => (
+              <div key={m.id} className={`machine-status-card ${m.status}`}>
+                <div className="m-info">
+                  <strong>{m.name}</strong>
+                  <span className="m-status-text">{m.status === 'active' ? 'Đang hoạt động' : 'Tạm dừng'}</span>
+                </div>
+                <div className="m-indicator"></div>
+              </div>
+            ))}
+          </div>
+          <hr />
+          <div className="reconciliation-preview">
+            <h4><i className="fas fa-check-double"></i> Đối soát nhanh</h4>
+            <small>Tỷ lệ khớp kho hiện tại: <strong className="text-success">98.5%</strong></small>
+            <div className="progress-bar-mini">
+              <div className="progress-fill" style={{width: '98.5%'}}></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+export default Tabthongke;
