@@ -57,10 +57,10 @@
 
 .kpi-card:hover { transform: translateY(-5px); }
 
-.kpi-card.gold  { background: --bg-body; }
-.kpi-card.brown { background: --bg-body; }
-.kpi-card.green { background: --bg-body; }
-.kpi-card.dark  { background: --bg-body; }
+.kpi-card.gold  { background:var(--white); }
+.kpi-card.brown { background:var(--white); }
+.kpi-card.green { background: var(--white); }
+.kpi-card.dark  { background: var(--white); }
 
 .kpi-card label { font-size: 13px; opacity: 0.9; display: block; margin-bottom: 5px; }
 .kpi-card h3 { font-size: 22px; margin: 0; font-weight: 800; }
