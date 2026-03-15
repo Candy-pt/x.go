@@ -28,23 +28,21 @@ const Dashboard = ({ setActiveTab }) => {
 
   useEffect(() => {
     fetchAllData();
-    const interval = setInterval(fetchAllData, 60000); // Tăng lên 60s để đỡ tốn tài nguyên
+    const interval = setInterval(fetchAllData, 60000); 
     return () => clearInterval(interval);
   }, []);
 
   // --- LOGIC TÍNH TOÁN DỮ LIỆU THỰC ---
   
-  // 1. Biểu đồ doanh thu thực tế (7 ngày gần nhất)
-  // 1. State điều khiển bộ lọc biểu đồ
-  const [chartRange, setChartRange] = useState('7DAYS'); // '7DAYS', 'MONTH', 'YEAR'
+  // 1. Biểu đồ doanh thu thực tế 
+  const [chartRange, setChartRange] = useState('7DAYS'); 
 
-  // 2. Logic nhào nặn dữ liệu biểu đồ dựa trên bộ lọc
   const dynamicChartData = useMemo(() => {
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth();
 
-    // --- TRƯỜNG HỢP: 7 NGÀY GẦN NHẤT ---
+    // --- 7 NGÀY  ---
     if (chartRange === '7DAYS') {
       const days = [...Array(7)].map((_, i) => {
         const d = new Date();
@@ -59,7 +57,7 @@ const Dashboard = ({ setActiveTab }) => {
       }));
     }
 
-    // --- TRƯỜNG HỢP: THEO THÁNG (Chia theo từng ngày trong tháng) ---
+    // --- THEO THÁNG ---
     if (chartRange === 'MONTH') {
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       return [...Array(daysInMonth)].map((_, i) => {
@@ -71,7 +69,7 @@ const Dashboard = ({ setActiveTab }) => {
       });
     }
 
-    // --- TRƯỜNG HỢP: THEO NĂM (Chia theo 12 tháng) ---
+    // --- THEO NĂM  ---
     if (chartRange === 'YEAR') {
       return [...Array(12)].map((_, i) => {
         const monthLabel = i + 1;
@@ -99,7 +97,6 @@ const Dashboard = ({ setActiveTab }) => {
 
   return (
       <div className="dashboard-wrapper">
-        {/* --- HEADER --- */}
         <div className="db-header">
           <div className="db-title">
             <h1>Quản lý chung</h1>
@@ -115,7 +112,7 @@ const Dashboard = ({ setActiveTab }) => {
           </div>
         </div>
 
-        {/* --- HÀNG 1: CÁC THẺ KPI (Tổng cộng 4 thẻ) --- */}
+        {/* --- CÁC THẺ KPI --- */}
         <div className="kpi-grid">
           <div className="kpi-card gold">
             <label>Doanh Thu Dự Kiến</label>
@@ -139,9 +136,8 @@ const Dashboard = ({ setActiveTab }) => {
           </div>
         </div>
 
-        {/* --- HÀNG 2: BIỂU ĐỒ & TRẠNG THÁI MÁY (Phải nằm trong main-db-grid) --- */}
+        {/* --- HÀNG 2: BIỂU ĐỒ & TRẠNG THÁI MÁY --- */}
         <div className="main-db-grid">
-          {/* Biểu đồ chiếm 2 cột */}
           <div className="db-card col-span-2">
             <div className="card-header">
               <h4><i className="fas fa-chart-line"></i> Phân Tích Doanh Thu</h4>

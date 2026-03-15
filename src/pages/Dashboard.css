@@ -101,6 +101,7 @@
 .db-table th { text-align: left; padding: 10px; font-size: 12px; color: #B38B60; border-bottom: 2px solid #f9f9f9; }
 .db-table td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
 .db-table tr:hover { background: #fbf6f1; }
+.db-title h1 { color: #2c210a;}
 
 .machine-item, .alert-item {
   display: flex;
