@@ -244,7 +244,7 @@
 /* Mobile (< 768px) */
 @media (max-width: 768px) {
   .sidebar {
-    width: 100%;
+    width: 80%;
     height: 100%;
     position: fixed;
     top: 0;
@@ -323,7 +323,7 @@
 
   .menu-toggle {
     font-size: 28px;
-    padding: 3px;
+    padding: 5px;
   }
 
   .main-header h1 {
@@ -340,7 +340,7 @@
 
   .nav-item-mobile {
     gap: 2px;
-    padding: 5px 3px;
+    padding: 8px 5px;
     font-size: 15px;
   }
 
