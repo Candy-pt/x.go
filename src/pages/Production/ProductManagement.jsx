@@ -20,6 +20,7 @@ const ProductManagement = () => {
     const [formData, setFormData] = useState({
         sku: '', name: '', product_type: 'RAW', unit: '', price: 0, description: ''
     });
+    const [runData, setRunData] = useState({  machine: "" });
 
 
     useEffect(() => { fetchProducts(1); }, [filterType, searchTerm]);

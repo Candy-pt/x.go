@@ -162,7 +162,7 @@ const ProductionManagement = () => {
           { id: 'CREATE', icon: 'plus', label: 'Tạo Lệnh' },
           { id: 'RECORD', icon: 'hammer', label: 'Ghi Nhận Mẻ' },
           { id: 'WASTAGE', icon: 'chart-bar', label: 'Hao Hụt' },
-          { id: 'INSIGHTS', icon: 'chart-pie', label: 'Thống Kê' } // Tab mới
+          { id: 'INSIGHTS', icon: 'chart-pie', label: 'Thống Kê' } 
         ].map(tab => (
           <button 
             key={tab.id}
