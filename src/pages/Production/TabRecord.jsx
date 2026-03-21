@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TabRecord = ({ form, orders, batches, products, onUpdateOutput, onAddOutput, onRemoveOutput, onSubmit, calculateWastage, setForm }) => {
+const TabRecord = ({ form, orders, batches, products, onUpdateOutput, runData, onAddOutput, onRemoveOutput, onSubmit, calculateWastage, setForm }) => {
   return (
     <div className="prod-tab-content fade-in">
       <h3>🔨 Ghi Nhận Mẻ Sản Xuất</h3>
