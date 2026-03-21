@@ -25,8 +25,8 @@ const TabRecord = ({ form, orders, batches, products, onUpdateOutput, runData, o
                 <label><i className="fas fa-tools"></i> Máy thực hiện xẻ:</label>
                 <select 
                     className="form-control"
-                    value={runData.machine}
-                    onChange={(e) => setRunData({...runData, machine: e.target.value})}
+                    // value={runData.machine}
+                    // onChange={(e) => setRunData({...runData, machine: e.target.value})}
                     required
                 >
                     <option value="">-- Chọn máy --</option>
