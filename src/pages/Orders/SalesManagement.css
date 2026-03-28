@@ -2,6 +2,7 @@
 
 .sales-container {
   padding: 20px;
+  width: 1000px;
   animation: fadeIn 0.5s ease-in;
 }
 

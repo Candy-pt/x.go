@@ -19,6 +19,7 @@ import axios from 'axios';
 
 const api = axios.create({
     baseURL: 'https://xgob-production.up.railway.app/api',
+
     withCredentials: true, // BẮT BUỘC: Để trình duyệt gửi Cookie kèm theo request
 });
 

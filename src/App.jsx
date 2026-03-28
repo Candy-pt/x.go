@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import api from './services/api';  // Import api đã tạo ở Bước 1
 import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
 
 // Import components
 import Main from './components/layout/Main';
@@ -12,6 +13,8 @@ import ProductionManagement from './pages/Production/ProductionManagement';
 import SalesManagement from './pages/Orders/SalesManagement';
 import PartnerManagement from './pages/Partners/PartnerManagement';
 import UnitManagement from './pages/Inventory/UnitManagement';
+import ReportDash from './pages/TK/TK';
+
 
 import './styles/App.css';
 import './styles/global.css';
@@ -85,6 +88,8 @@ function App() {
         return <SalesManagement setActiveTab={setActiveTab} />;
       case 'PRODUC':
         return <ProductManagement setActiveTab={setActiveTab} />;
+      case 'TK':
+        return <ReportDash setActiveTab={setActiveTab} />;
       case 'UNITS':
         return <UnitManagement setActiveTab={setActiveTab} />;
       default:
@@ -98,22 +103,30 @@ function App() {
     <Router>
       <Routes>
         {!isAuthenticated ? (
-          <Route path="*" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+          <>
+          <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          <Route path="*" element={<Navigate to="/login" replace />} />
+          </>
         ) : (
-          <Route
-            path="/*"
-            element={
-              <Main 
-                activeTab={activeTab} 
-                setActiveTab={setActiveTab} 
-                isAuthenticated={isAuthenticated} 
-                onLogout={handleLogout} 
-                user={user}
-              >
-                {renderContent()}
-              </Main>
-            }
-          />
+          <>
+            <Route
+              path="/*"
+              element={
+                <Main 
+                  activeTab={activeTab} 
+                  setActiveTab={setActiveTab} 
+                  isAuthenticated={isAuthenticated} 
+                  onLogout={handleLogout} 
+                  user={user}
+                >
+                  {renderContent()}
+                </Main>
+              }
+            />
+          </>
+          
         )}
       </Routes>
     </Router>

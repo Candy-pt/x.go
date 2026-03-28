@@ -33,7 +33,8 @@ export default defineConfig({
     port: 5173,             
     https: false,            
     proxy: {                
-      '/api': 'https://xgob-production.up.railway.app',
+      // '/api': 'https://xgob-production.up.railway.app',
+      '/api' : 'http://127.0.0.1/'
     },
     hmr: {                   
       host: 'localhost',

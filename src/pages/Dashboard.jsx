@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import api from '../services/api';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
+import { 
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, 
+  XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend 
+} from 'recharts';
 import './Dashboard.css';
 
 const Dashboard = ({ setActiveTab }) => {
@@ -8,6 +11,8 @@ const Dashboard = ({ setActiveTab }) => {
   const [orders, setOrders] = useState([]);
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [recentTxLoading, setRecentTxLoading] = useState(false);
 
   const fetchAllData = async () => {
     try {
@@ -26,9 +31,29 @@ const Dashboard = ({ setActiveTab }) => {
     }
   };
 
+  const fetchRecentTransactions = async () => {
+    setRecentTxLoading(true);
+    try {
+      const response = await api.get('inventory/transactions/?page=1&page_size=5');
+      const data = response.data.results || response.data || [];
+      setRecentTransactions(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Lỗi tải giao dịch gần nhất:", err);
+      setRecentTransactions([]);
+    } finally {
+      setRecentTxLoading(false);
+    }
+  };
+
   useEffect(() => {
+    fetchRecentTransactions();
     fetchAllData();
-    const interval = setInterval(fetchAllData, 60000); 
+    
+    const interval = setInterval(() => {
+        fetchAllData();
+        fetchRecentTransactions(); 
+    }, 60000); 
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -93,7 +118,43 @@ const Dashboard = ({ setActiveTab }) => {
 
   const fmt = (val) => new Intl.NumberFormat('vi-VN').format(val);
 
+
+  // ==========================================
+  // 2. LOGIC TÍNH TOÁN CHO CÁC BIỂU ĐỒ & UI MỚI
+  // ==========================================
+  
+  // -- Biểu đồ tròn: Cơ cấu doanh thu theo Khách Hàng --
+  const revenueByCustomer = useMemo(() => {
+    const map = {};
+    orders.forEach(o => {
+      if (o.status !== 'CANCELLED') {
+        const name = o.customer_name || 'Khách lẻ';
+        map[name] = (map[name] || 0) + (o.total_value || 0);
+      }
+    });
+    return Object.keys(map).map(key => ({ name: key, value: map[key] })).sort((a,b) => b.value - a.value).slice(0, 4); // Lấy top 4
+  }, [orders]);
+  const PIE_COLORS = ['#d97706', '#059669', '#3b82f6', '#8b4513'];
+
+  // -- Dữ liệu Biểu đồ Cột chồng (MÔ PHỎNG - Chờ bạn tạo API lấy data sản xuất) --
+  const mockProductionChart = [
+    { date: 'Thứ 2', input: 120, output: 75 },
+    { date: 'Thứ 3', input: 150, output: 95 },
+    { date: 'Thứ 4', input: 180, output: 120 },
+    { date: 'Thứ 5', input: 100, output: 65 },
+    { date: 'Thứ 6', input: 200, output: 130 },
+    { date: 'Thứ 7', input: 250, output: 165 },
+    { date: 'CN', input: 210, output: 140 },
+  ];
+
+  // -- Tính toán Tồn kho (Dựa vào batches của bạn) --
+  // Giả sử batch.product_type là 'RAW' (Nguyên liệu) hoặc khác. Nếu không có, mình chia đôi tạm.
+  const rawStock = batches.filter(b => b.product_type === 'RAW' || !b.product_type).reduce((s, b) => s + (Number(b.current_qty) || 0), 0);
+  const fgStock = batches.filter(b => b.product_type === 'FINISHED').reduce((s, b) => s + (Number(b.current_qty) || 0), 0);
+
+
   if (loading) return <div className="dashboard-loading">Đang cập nhật số liệu xưởng...</div>; 
+
 
   return (
       <div className="dashboard-wrapper">
@@ -113,30 +174,41 @@ const Dashboard = ({ setActiveTab }) => {
         </div>
 
         {/* --- CÁC THẺ KPI --- */}
-        <div className="kpi-grid">
-          <div className="kpi-card gold">
-            <label>Doanh Thu Dự Kiến</label>
-            <h3>{fmt(orders.reduce((sum, o) => sum + (o.total_value || 0), 0))} ₫</h3>
-            <span className="trend">Theo {orders.length} đơn hàng</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '20px' }}>
+          
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #f59e0b', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Doanh Thu Dự Kiến</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{fmt(orders.reduce((sum, o) => sum + (o.total_value || 0), 0))} ₫</h3>
           </div>
-          <div className="kpi-card brown">
-            <label>Tỷ Lệ Thu Hồi (Recovery)</label>
-            <h3>{recoveryRate.toFixed(1)}%</h3>
-            <div className="progress-mini"><div style={{width: `${recoveryRate}%`}}></div></div>
+
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #8b4513', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Tỷ Lệ Thu Hồi</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{recoveryRate.toFixed(1)} %</h3>
           </div>
-          <div className="kpi-card green">
-            <label>Đơn Chờ Xử Lý</label>
-            <h3>{pendingOrders}</h3>
-            <span className="trend">Cần xác nhận giao hàng</span>
+
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #10b981', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Đơn Chờ Xử Lý</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{pendingOrders} <span style={{fontSize: '14px', fontWeight: 'normal'}}>đơn</span></h3>
           </div>
-          <div className="kpi-card dark">
-            <label>Sản Lượng Tuần</label>
-            <h3>{stats?.total_production_week || 0} m³</h3>
-            <span className="trend">Gỗ xẻ thành phẩm</span>
+
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #3b82f6', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Sản Lượng Tuần</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{stats?.total_production_week || 0} m³</h3>
+          </div>
+
+          {/* KPI MỚI */}
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #6366f1', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Tồn Kho Nguyên Liệu</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{fmt(rawStock)} m³</h3>
+          </div>
+
+          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', borderBottom: '4px solid #ec4899', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: '13px', color: '#666' }}>Tồn Kho Thành Phẩm</div>
+            <h3 style={{ margin: '5px 0', fontSize: '20px', color: '#333' }}>{fmt(fgStock)} m³</h3>
           </div>
         </div>
 
-        {/* --- HÀNG 2: BIỂU ĐỒ & TRẠNG THÁI MÁY --- */}
+        {/* --- HÀNG 2: BIỂU ĐỒ đường --- */}
         <div className="main-db-grid">
           <div className="db-card col-span-2">
             <div className="card-header">
@@ -163,58 +235,152 @@ const Dashboard = ({ setActiveTab }) => {
             </div>
           </div>
 
-          {/* Trạng thái máy chiếm 1 cột */}
-          <div className="db-card">
-            <div className="card-header"><h4><i className="fas fa-cog"></i> Trạng Thái Máy</h4></div>
-            <div className="machine-list">
-              {(stats?.machines || [1,2,3]).map((m, i) => (
-                <div key={i} className="machine-item">
-                  <span>{m.name || `Máy xẻ ${i+1}`}</span>
-                  <span className={`status-tag ${(m.status || 'RUNNING').toLowerCase()}`}>
-                    {m.status || 'RUNNING'}
-                  </span>
-                </div>
-              ))}
+          {/* Biểu đồ Tròn Mới */}
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+             <h4 style={{ margin: '0 0 20px 0', color: '#444' }}><i className="fas fa-chart-pie"></i> Cơ Cấu Doanh Thu</h4>
+             {revenueByCustomer.length === 0 ? <p style={{textAlign: 'center', color: '#888', marginTop: '50px'}}>Chưa có doanh thu</p> : (
+               <div style={{ width: '100%', height: 300 }}>
+                 <ResponsiveContainer>
+                   <PieChart>
+                     <Pie data={revenueByCustomer} innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value">
+                       {revenueByCustomer.map((entry, index) => <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />)}
+                     </Pie>
+                     <Tooltip formatter={(value) => fmt(value) + ' đ'} />
+                     <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                   </PieChart>
+                 </ResponsiveContainer>
+               </div>
+             )}
+          </div>
+
+          
+        </div>
+        {/* --- HÀNG 3: BIỂU ĐỒ cột chồng --- */}
+        <div style={{ gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '20px', background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)'  }}>
+          <div>
+            <h4 style={{ margin: '0 0 20px 0', color: '#444' }}><i className="fas fa-industry"></i> Hiệu Suất Sản Xuất</h4>
+            <div style={{ width: '100%', height: 300 }}>
+              <ResponsiveContainer>
+                <BarChart data={mockProductionChart} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="date" tick={{fontSize: 12}} />
+                  <YAxis tick={{fontSize: 12}} />
+                  <Tooltip cursor={{fill: '#f5f5f5'}} />
+                  <Legend />
+                  <Bar dataKey="input" name="Gỗ nguyên liệu (m³)" stackId="a" fill="#d97706" />
+                  <Bar dataKey="output" name="Thành phẩm (m³)" stackId="a" fill="#059669" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
+
         </div>
 
-        {/* --- HÀNG 3: BẢNG ĐƠN HÀNG & CẢNH BÁO KHO --- */}
-        <div className="main-db-grid">
-          <div className="db-card col-span-2">
-            <div className="card-header"><h4><i className="fas fa-list"></i> Đơn Hàng Vừa Lập</h4></div>
-            <table className="db-table">
+        {/* --- HÀNG 3: BẢNG DỮ LIỆU --- */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '20px' }}>
+          
+          {/* 1. Đơn Hàng Vừa Lập */}
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <h4 style={{ margin: 0, color: '#444' }}><i className="fas fa-list"></i> Đơn Hàng Vừa Lập</h4>
+              {/* Nút Xem Tất Cả Mới */}
+              <button onClick={() => setActiveTab('SALES')} style={{ background: 'none', border: 'none', color: '#3b82f6', fontWeight: 'bold', cursor: 'pointer' }}>Xem tất cả →</button>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
               <thead>
-                <tr><th>Mã</th><th>Khách</th><th>Giá Trị</th><th>Trạng Thái</th></tr>
+                <tr style={{ borderBottom: '2px solid #eee', color: '#888' }}>
+                  <th style={{ paddingBottom: '10px' }}>Mã</th>
+                  <th style={{ paddingBottom: '10px' }}>Khách</th>
+                  <th style={{ paddingBottom: '10px' }}>Giá Trị</th>
+                  <th style={{ paddingBottom: '10px' }}>Trạng Thái</th>
+                </tr>
               </thead>
               <tbody>
                 {orders.slice(0, 5).map(o => (
-                  <tr key={o.id}>
-                    <td><b>{o.code}</b></td>
-                    <td>{o.customer_name}</td>
-                    <td>{fmt(o.total_value)} ₫</td>
-                    <td><span className={`pill ${o.status}`}>{o.status}</span></td>
+                  <tr key={o.id} style={{ borderBottom: '1px solid #f9f9f9' }}>
+                    <td style={{ padding: '10px 0', fontWeight: 'bold', color: '#333' }}>{o.code || o.id}</td>
+                    <td style={{ padding: '10px 0' }}>{o.customer_name}</td>
+                    <td style={{ padding: '10px 0', fontWeight: '500' }}>{fmt(o.total_value)} ₫</td>
+                    <td style={{ padding: '10px 0' }}>
+                      <span style={{ fontSize: '11px', padding: '4px 8px', borderRadius: '12px', background: '#f3f4f6', fontWeight: 'bold', color: '#555' }}>
+                        {o.status}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {/* 2. Giao Dịch Kho Gần Nhất (Cột mới) */}
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <h4 style={{ margin: '0 0 15px 0', color: '#444' }}><i className="fas fa-exchange-alt"></i> Giao Dịch Kho</h4>
+            {/* <button onClick={() => setActiveTab('TRANSACTIONS')} style={{ background: 'none', border: 'none', color: '#131415', fontWeight: 'bold', cursor: 'pointer' }}>Xem thêm</button> */}
 
-          <div className="db-card">
-            <div className="card-header"><h4><i className="fas fa-exclamation-circle"></i> Cảnh Báo Kho</h4></div>
-            <div className="alert-list">
-              {batches.filter(b => (b.current_qty || 0) < 50).slice(0, 5).map(b => (
-                <div key={b.id} className="alert-item">
-                  <div className="alert-info">
-                    <p>{b.product_name || b.code}</p>
-                    <small>Lô: {b.code}</small>
-                  </div>
-                  <span className="alert-qty">{b.current_qty}</span>
-                </div>
-              ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {recentTransactions.length === 0 ? (
+                  <div style={{ color: '#888', textAlign: 'center', fontSize: '13px' }}>Chưa có giao dịch nào</div>
+              ) : (
+                  recentTransactions.slice(0, 5).map((tx, i) => {
+                    const isImport = tx.transaction_type === 'IMPORT';
+                    const color = isImport ? '#d90622' : '#059669'; // đỏ - Nhập, Xanh - Xuất
+                    const sign = isImport ? '+' : '-';
+                    
+                    // Xử lý format thời gian (tùy thuộc vào trường ngày giờ API bạn trả về, ví dụ tx.created_at hoặc tx.date)
+                    const timeString = tx.date ? new Date(tx.date).toLocaleDateString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                    return (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+                        <div>
+                          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>
+                            {tx.product_name || 'Sản phẩm'}
+                          </div>
+                          <div style={{ fontSize: '12px', color: '#888' }}>
+                            {timeString} • <span style={{ color: color, fontWeight: 'bold' }}>{isImport ? 'NHẬP' : 'XUẤT'}</span>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: '14px', fontWeight: 'bold', color: color }}>
+                          {sign}{Number.isInteger(parseFloat(tx.quantity)) ? tx.quantity : parseFloat(tx.quantity).toFixed(2)}
+                        </div>
+                      </div>
+                    );
+                  })
+              )}
             </div>
           </div>
+
+          {/* 3. Cảnh Báo Kho (Đã tối ưu UI) */}
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <h4 style={{ margin: '0 0 15px 0', color: '#dc2626' }}><i className="fas fa-exclamation-circle"></i> Cảnh Báo Kho</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {batches.filter(b => (b.current_qty || 0) < 50).slice(0, 5).map(b => {
+                const isCritical = b.current_qty < 10; // Dưới 10 thì báo Đỏ, dưới 50 báo Vàng
+                return (
+                  <div key={b.id} style={{ 
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+                    padding: '10px', borderRadius: '6px', 
+                    backgroundColor: isCritical ? '#fee2e2' : '#fef3c7',
+                    borderLeft: `4px solid ${isCritical ? '#ef4444' : '#f59e0b'}`
+                  }}>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#333' }}>{b.product_name || b.code}</div>
+                      <div style={{ fontSize: '12px', color: '#666' }}>Lô: {b.code}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 'bold', color: isCritical ? '#b91c1c' : '#b45309' }}>{b.current_qty}</div>
+                      <div style={{ fontSize: '11px', color: isCritical ? '#ef4444' : '#d97706' }}>{isCritical ? 'Sắp hết!' : 'Cần nhập'}</div>
+                    </div>
+                  </div>
+                );
+              })}
+              {batches.filter(b => (b.current_qty || 0) < 50).length === 0 && (
+                <div style={{ textAlign: 'center', color: '#10b981', padding: '20px' }}>Kho đang ở mức an toàn</div>
+              )}
+            </div>
+          </div>
+
         </div>
+
+       
       </div>
     );
 };

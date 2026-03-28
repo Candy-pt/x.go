@@ -7,7 +7,6 @@ import TabOrders from './TabOrders';
 import TabCreate from './TabCreate';
 import TabRecord from './TabRecord';
 import TabWastage from './TabWastage';
-import Tabthongke from './Tabthongke'; 
 
 const ProductionManagement = () => {
   const [activeTab, setActiveTab] = useState('ORDERS');
@@ -162,7 +161,6 @@ const ProductionManagement = () => {
           { id: 'CREATE', icon: 'plus', label: 'Tạo Lệnh' },
           { id: 'RECORD', icon: 'hammer', label: 'Ghi Nhận Mẻ' },
           { id: 'WASTAGE', icon: 'chart-bar', label: 'Hao Hụt' },
-          { id: 'INSIGHTS', icon: 'chart-pie', label: 'Thống Kê' } 
         ].map(tab => (
           <button 
             key={tab.id}
@@ -200,67 +198,67 @@ const ProductionManagement = () => {
         )}
         
         {activeTab === 'WASTAGE' && <TabWastage loading={wastageLoading} orders={wastageOrders} averageWastage={averageWastage} />}
-        
-        {activeTab === 'INSIGHTS' && <Tabthongke orders={orders} machines={machines} />}
-      </div>
+      
 
-      {/* --- MODAL SỬA --- */}
-      {isEditModalOpen && selectedOrder && (
-        <div className="modal-overlay">
-          <div className="modal-content fade-in">
-            <div className="modal-header">
-              <h3>Sửa Lệnh: {selectedOrder.code}</h3>
-              <button className="close-btn" onClick={() => setIsEditModalOpen(false)}>&times;</button>
+        {/* --- MODAL SỬA --- */}
+        {isEditModalOpen && selectedOrder && (
+          <div className="modal-overlay">
+            <div className="modal-content fade-in">
+              <div className="modal-header">
+                <h3>Sửa Lệnh: {selectedOrder.code}</h3>
+                <button className="close-btn" onClick={() => setIsEditModalOpen(false)}>&times;</button>
+              </div>
+              <form onSubmit={handleUpdateOrder} className="prod-form">
+                <div className="form-group">
+                  <label>Trạng Thái</label>
+                  <select value={selectedOrder.status} onChange={(e) => setSelectedOrder({...selectedOrder, status: e.target.value})}>
+                    <option value="PLANNED">Lên kế hoạch</option>
+                    <option value="IN_PROGRESS">Đang chạy</option>
+                    <option value="COMPLETED">Hoàn thành</option>
+                    <option value="CANCELLED">Hủy</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Ngày Bắt Đầu</label>
+                  <input type="date" value={selectedOrder.start_date} onChange={(e) => setSelectedOrder({...selectedOrder, start_date: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Ghi Chú</label>
+                  <textarea rows="3" value={selectedOrder.note || ''} onChange={(e) => setSelectedOrder({...selectedOrder, note: e.target.value})} />
+                </div>
+                <div className="modal-actions">
+                  <button type="button" className="btn-secondary" onClick={() => setIsEditModalOpen(false)}>Hủy</button>
+                  <button type="submit" className="btn-primary">Lưu</button>
+                </div>
+              </form>
             </div>
-            <form onSubmit={handleUpdateOrder} className="prod-form">
-              <div className="form-group">
-                <label>Trạng Thái</label>
-                <select value={selectedOrder.status} onChange={(e) => setSelectedOrder({...selectedOrder, status: e.target.value})}>
-                  <option value="PLANNED">Lên kế hoạch</option>
-                  <option value="IN_PROGRESS">Đang chạy</option>
-                  <option value="COMPLETED">Hoàn thành</option>
-                  <option value="CANCELLED">Hủy</option>
-                </select>
+          </div>
+        )}
+
+        {/* --- MODAL CHI TIẾT --- */}
+        {isDetailModalOpen && selectedOrder && (
+          <div className="modal-overlay">
+            <div className="modal-content detail-modal fade-in">
+              <div className="modal-header">
+                <h3>Chi Tiết Lệnh: {selectedOrder.code}</h3>
+                <button className="close-btn" onClick={() => setIsDetailModalOpen(false)}>&times;</button>
               </div>
-              <div className="form-group">
-                <label>Ngày Bắt Đầu</label>
-                <input type="date" value={selectedOrder.start_date} onChange={(e) => setSelectedOrder({...selectedOrder, start_date: e.target.value})} />
-              </div>
-              <div className="form-group">
-                <label>Ghi Chú</label>
-                <textarea rows="3" value={selectedOrder.note || ''} onChange={(e) => setSelectedOrder({...selectedOrder, note: e.target.value})} />
+              <div className="detail-body">
+                <div className="detail-row"><span>Đơn hàng:</span> <strong>{selectedOrder.sale_order?.code || 'N/A'}</strong></div>
+                <div className="detail-row"><span>Trạng thái:</span> <span className={`status-badge status-${selectedOrder.status?.toLowerCase()}`}>{selectedOrder.status}</span></div>
+                <hr />
+                <h4>Sản lượng đầu ra (Tổng các mẻ)</h4>
+                <p>Mục này thống kê từ <code>total_output</code> của Backend: <strong>{selectedOrder.total_output || 0} SP</strong></p>
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn-secondary" onClick={() => setIsEditModalOpen(false)}>Hủy</button>
-                <button type="submit" className="btn-primary">Lưu</button>
+                <button className="btn-primary" onClick={() => setIsDetailModalOpen(false)}>Đóng</button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* --- MODAL CHI TIẾT --- */}
-      {isDetailModalOpen && selectedOrder && (
-        <div className="modal-overlay">
-          <div className="modal-content detail-modal fade-in">
-            <div className="modal-header">
-              <h3>Chi Tiết Lệnh: {selectedOrder.code}</h3>
-              <button className="close-btn" onClick={() => setIsDetailModalOpen(false)}>&times;</button>
-            </div>
-            <div className="detail-body">
-              <div className="detail-row"><span>Đơn hàng:</span> <strong>{selectedOrder.sale_order?.code || 'N/A'}</strong></div>
-              <div className="detail-row"><span>Trạng thái:</span> <span className={`status-badge status-${selectedOrder.status?.toLowerCase()}`}>{selectedOrder.status}</span></div>
-              <hr />
-              <h4>Sản lượng đầu ra (Tổng các mẻ)</h4>
-              <p>Mục này thống kê từ <code>total_output</code> của Backend: <strong>{selectedOrder.total_output || 0} SP</strong></p>
-            </div>
-            <div className="modal-actions">
-              <button className="btn-primary" onClick={() => setIsDetailModalOpen(false)}>Đóng</button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
+
   );
 };
 

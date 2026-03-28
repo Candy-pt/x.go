@@ -2,6 +2,7 @@
 
 .unit-mgmt-container {
     padding: 20px;
+    width: 800px;
     background: var(--bg-card);
     border-radius: var(--radius);
     animation: fadeIn 0.3s ease-in;

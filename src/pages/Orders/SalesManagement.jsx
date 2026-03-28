@@ -12,7 +12,7 @@ import Oder from './sale/Oder';
 import OrderDetailModal from './sale/OrderDetailModal';
 
 const SalesManagement = () => {
-  const [activeTab, setActiveTab] = useState('KANBAN');
+  const [activeTab, setActiveTab] = useState('COMPLETED_LIST');
   const [orders, setOrders] = useState([]);
   const [ordersAll, setOrdersAll] = useState([]);
   const [ordersByStatus, setOrdersByStatus] = useState({});
